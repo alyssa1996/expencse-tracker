@@ -1,3 +1,6 @@
+// Always server-render; Notion data is cached separately via unstable_cache
+export const dynamic = 'force-dynamic'
+
 import { getCachedExpenses } from '@/lib/notion/cache'
 import { normalizeExpenses } from '@/lib/data/normalizer'
 import {

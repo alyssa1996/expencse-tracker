@@ -22,5 +22,5 @@ export function normalizeExpenses(rows: RawExpenseRow[]): Expense[] {
 }
 
 export function getAvailableYears(expenses: Expense[]): Year[] {
-  return [...new Set(expenses.map((e) => e.year))].sort() as Year[]
+  return Array.from(new Set(expenses.map((e) => e.year))).sort() as Year[]
 }

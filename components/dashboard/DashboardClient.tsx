@@ -1,14 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { Expense, MonthlySummary, YearlySummary } from '@/types/expense'
 import { SummaryCards } from './SummaryCards'
-import { MonthlyChart } from './MonthlyChart'
-import { CategoryPieChart } from './CategoryPieChart'
 import { BudgetProgress } from './BudgetProgress'
-import { YearComparison } from './YearComparison'
-import { YearlyView } from './YearlyView'
 import { FixedExpenseAnalysis } from './FixedExpenseAnalysis'
+
+// Recharts-based components must be loaded client-side only (no SSR)
+const MonthlyChart = dynamic(() => import('./MonthlyChart').then((m) => m.MonthlyChart), { ssr: false })
+const CategoryPieChart = dynamic(() => import('./CategoryPieChart').then((m) => m.CategoryPieChart), { ssr: false })
+const YearComparison = dynamic(() => import('./YearComparison').then((m) => m.YearComparison), { ssr: false })
+const YearlyView = dynamic(() => import('./YearlyView').then((m) => m.YearlyView), { ssr: false })
 
 interface DashboardClientProps {
   expenses: Expense[]

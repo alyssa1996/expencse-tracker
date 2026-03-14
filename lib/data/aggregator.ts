@@ -39,7 +39,7 @@ export function buildYearlySummary(expenses: Expense[], year: Year): YearlySumma
   for (let m = 1; m <= 12; m++) {
     monthsSet.add(`${year}-${String(m).padStart(2, '0')}`)
   }
-  const months = [...monthsSet].sort()
+  const months = Array.from(monthsSet).sort()
 
   const byMonth = months.map((month) => buildMonthlySummary(yearExpenses, month))
   const byCategory = emptyByCategory()
