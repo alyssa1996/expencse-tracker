@@ -86,11 +86,23 @@ async function fetchAllPages(databaseId: string): Promise<PageObjectResponse[]> 
 
 export async function fetchExpensesForYear(year: Year): Promise<RawExpenseRow[]> {
   const databaseId = DATABASE_IDS[year]
-  const pages = await fetchAllPages(databaseId)
 
-  return pages
-    .map((page) => parsePage(page, year))
-    .filter((row) => row.date !== null && row.amount !== null)
+  try {
+    const pages = await fetchAllPages(databaseId)
+    return pages
+      .map((page) => parsePage(page, year))
+      .filter((row) => row.date !== null && row.amount !== null)
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    if (message.includes('multiple data sources')) {
+      throw new Error(
+        `${year}년 DB가 "연결된 데이터베이스(Connected Database)" 형식이에요. ` +
+        `Notion API는 multiple data sources를 지원하지 않아요. ` +
+        `노션에서 원본 DB의 URL을 확인하고 .env의 NOTION_DATABASE_ID_${year}를 업데이트해 주세요.`
+      )
+    }
+    throw err
+  }
 }
 
 export async function fetchAllExpenses(): Promise<RawExpenseRow[]> {
